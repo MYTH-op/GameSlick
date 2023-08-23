@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Choose/Chess.unity
     guid: 80624ab3521314881a5a1bf0581bae69
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Choose/MainScreen.unity
     guid: 65285607ed29d46fc99da93084c6d3c1
   - enabled: 1
