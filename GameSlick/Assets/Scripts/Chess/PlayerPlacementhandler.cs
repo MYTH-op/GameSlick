@@ -34,27 +34,27 @@ public class PlayerPlacementhandler : MonoBehaviour
         
     }
 
-    public void OnMouseDown()
-    {
-        Debug.Log("clicked");
-        ChessBoardHandler.Instance.ClearHighlights();
-        PlayerPlacementhandler[] pieceScripts = Object.FindObjectsOfType<PlayerPlacementhandler>();
+    //public void OnMouseDown()
+    //{
+    //    Debug.Log("clicked Piece");
+    //    ChessBoardHandler.Instance.ClearHighlights();
+    //    PlayerPlacementhandler[] pieceScripts = Object.FindObjectsOfType<PlayerPlacementhandler>();
 
-        // Creating a list of all the pieces positions
-        for (int i = 0; i < pieceScripts.Length; i++)
-        {
-            PiecesPos.Add(new Vector2Int(pieceScripts[i].row, pieceScripts[i].column));
-        }
-        //Debug.Log(PiecesPos[1]);
-        // Getting the valid moves for the piece and highlighting
-        List<Vector2Int> mov = validMoves.getValidMoves(transform.name, piece.row, piece.column, PiecesPos);
-        for (int i = 0; i < mov.Count; i++)
-        {
-            ChessBoardHandler.Instance.Highlight(mov[i].x, mov[i].y);
-        }
+    //    // Creating a list of all the pieces positions
+    //    for (int i = 0; i < pieceScripts.Length; i++)
+    //    {
+    //        PiecesPos.Add(new Vector2Int(pieceScripts[i].row, pieceScripts[i].column));
+    //    }
+    //    //Debug.Log(PiecesPos[1]);
+    //    // Getting the valid moves for the piece and highlighting
+    //    List<Vector2Int> mov = validMoves.getValidMoves(transform.name, piece.row, piece.column, PiecesPos);
+    //    //for (int i = 0; i < mov.Count; i++)
+    //    //{
+    //    //    ChessBoardHandler.Instance.Highlight(mov[i].x, mov[i].y);
+    //    //}
 
-        cgc.SelectPiece(row, column, gameObject, mov);
-    }
+    //    //cgc.SelectPiece(row, column, gameObject, mov);
+    //}
 
 
 
