@@ -14,9 +14,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Choose/Chess.unity
     guid: 80624ab3521314881a5a1bf0581bae69
-  - enabled: 0
-    path: Assets/Scenes/Choose/MainScreen.unity
-    guid: 65285607ed29d46fc99da93084c6d3c1
   - enabled: 1
     path: Assets/Scenes/Choose/PingPong.unity
     guid: 3149ff87df72a4e7f8790f60551556f2
@@ -27,6 +24,21 @@ EditorBuildSettings:
     path: Assets/Scenes/Choose/TicTacToe.unity
     guid: 87c2b9541bd994335be56875b520e61b
   - enabled: 1
-    path: Assets/Scenes/Game/Chess.unity
+    path: Assets/Scenes/Game/ChessGameScene.unity
     guid: 8c4dd17413f6e54428f6c9f69ec22d61
+  - enabled: 1
+    path: Assets/Scenes/Choose/MainScene.unity
+    guid: b6dfdeccd7fab16459c2377ca87284b0
+  - enabled: 1
+    path: Assets/Scenes/Game/AirHockeyGameScene.unity
+    guid: 6720104b8053a4b34bccfd9a13b8faef
+  - enabled: 1
+    path: Assets/Scenes/Game/PingPongGameScene.unity
+    guid: d6db48eebfc0343ddbbfe183ecf03b51
+  - enabled: 1
+    path: Assets/Scenes/Game/SwordThrowGameScene.unity
+    guid: ae168778ddb6d4d219336dd90b0b8287
+  - enabled: 1
+    path: Assets/Scenes/Game/TicTacToeGameScene.unity
+    guid: 87dba0110d8833344be03f83a23023c8
   m_configObjects: {}

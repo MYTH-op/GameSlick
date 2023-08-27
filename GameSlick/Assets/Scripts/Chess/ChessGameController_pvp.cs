@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class ChessGameController : MonoBehaviour
 {
@@ -34,13 +35,31 @@ public class ChessGameController : MonoBehaviour
 
     }
 
-    internal void movePiece(GameObject pieceToMove, int row, int col)
+    internal void movePiece(GameObject pieceToMove, int rowToMove, int colToMove)
     {
+        // get the current tile of the piece
+        GameObject currentTile = ChessBoardHandler.Instance.GetTile(pieceToMove.GetComponent<PlayerPlacementhandler>().row, pieceToMove.GetComponent<PlayerPlacementhandler>().column);
+        tiles currentTileScript = currentTile.GetComponent<tiles>();
+
+        // get the tile to move to
+        GameObject tileToMove = ChessBoardHandler.Instance.GetTile(rowToMove, colToMove);
+        tiles tileToMoveScript = tileToMove.GetComponent<tiles>();
+
+        // move the piece to the tile
+        pieceToMove.GetComponent<PlayerPlacementhandler>().row = rowToMove;
+        pieceToMove.GetComponent<PlayerPlacementhandler>().column = colToMove;
+        pieceToMove.transform.position = tileToMove.transform.position;
+        currentTileScript.piece = null;
+        tileToMoveScript.piece = pieceToMove;
+        clearSelection();
 
     }
 
     internal void SelectTile(int row, int col)
     {
+        // clear any highlights on the board
+        ChessBoardHandler.Instance.ClearHighlights();
+
         // get the tile
         selectedTile = ChessBoardHandler.Instance.GetTile(row, col);
         tiles tileScript = selectedTile.GetComponent<tiles>();
@@ -56,14 +75,19 @@ public class ChessGameController : MonoBehaviour
                 // if a piece is already selected, check if the piece on the tile is an enemy piece
                 if (checkEnemy(tileScript.piece))
                 {
-                    // if the piece on the tile is an enemy piece, attack the piece
+                    // if the piece on the tile is an enemy piece
+                        // check if the attack move is in valid moves
+                        
+                        // if the attack move is in valid moves, attack the piece
+                        
+                        // if the attack move is not in valid moves, do nothing
 
 
                 }
                 else
                 {
                     // if the piece on the tile is not an enemy piece, select the piece
-
+                    SelectPiece(tileScript.piece);
 
                 }
 
@@ -78,24 +102,36 @@ public class ChessGameController : MonoBehaviour
         else
         {
             // if a piece is not present on the tile, check if a piece is already selected
-
+            if (selectedPiece != null)
+            {
                 // if a piece is already selected, move the piece to the tile
-
+                PlayerPlacementhandler pieceScript = selectedPiece.GetComponent<PlayerPlacementhandler>();
+                List<Vector2Int> mov = validMovesScript.getValidMoves(selectedPiece.name, pieceScript.row, pieceScript.column, PiecesPos);
+                if (mov.Count > 0)
+                {
+                    if (mov.Contains(new Vector2Int(row, col)))
+                    {
+                        // if the move is valid, move the piece
+                        movePiece(selectedPiece, row, col);
+                    }
+                    else
+                    {
+                        // if the move is not valid, do nothing
+                    }
+                }
+            }
+            else
+            {
                 // if a piece is not already selected, do nothing
+            }
         }
 
     }
 
     internal void SelectPiece(GameObject piece)
     {
-        // Creating a list of all the pieces positions
-        PlayerPlacementhandler[] pieceScripts = Object.FindObjectsOfType<PlayerPlacementhandler>();
-        for (int i = 0; i < pieceScripts.Length; i++)
-        {
-            PiecesPos.Add(new Vector2Int(pieceScripts[i].row, pieceScripts[i].column));
-        }
-
-        Debug.Log(PiecesPos[1]);
+        // Getting a list of all the pieces positions
+        PiecesPos = getPiecePositions();
 
         // Getting the valid moves for the piece and highlighting
         selectedPiece = piece;
@@ -115,10 +151,24 @@ public class ChessGameController : MonoBehaviour
         }        
     }
 
+    internal List<Vector2Int> getPiecePositions()
+    {
+        List<Vector2Int> piecePositions = new List<Vector2Int>();
+        PlayerPlacementhandler[] pieceScripts = Object.FindObjectsOfType<PlayerPlacementhandler>();
+        for (int i = 0; i < pieceScripts.Length; i++)
+        {
+            piecePositions.Add(new Vector2Int(pieceScripts[i].row, pieceScripts[i].column));
+        }
+        return piecePositions;
+    }
+
 
     internal void Attack(GameObject PieceToAttack)
     {
-
+        PlayerPlacementhandler pieceToAttackScript = PieceToAttack.GetComponent<PlayerPlacementhandler>();
+        selectedPiece.GetComponent<PlayerPlacementhandler>().row = pieceToAttackScript.row;
+        selectedPiece.GetComponent<PlayerPlacementhandler>().column = pieceToAttackScript.column;
+        selectedPiece.transform.position = PieceToAttack.transform.position;
     }
 
 
@@ -161,6 +211,13 @@ public class ChessGameController : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+
+
+    public void Exit()
+    {
+        SceneManager.LoadScene("MainScene");
     }
 
 }
