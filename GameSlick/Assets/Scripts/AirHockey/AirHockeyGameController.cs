@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class AirHockeyController : MonoBehaviour
+public class AirHockeyGameController : MonoBehaviour
 {
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -19,9 +17,10 @@ public class AirHockeyController : MonoBehaviour
         
     }
 
-    public void GoBack()
+    public void Exit()
     {
         SceneManager.LoadScene("MainScene");
     }
+
 
 }

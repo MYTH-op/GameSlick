@@ -19,6 +19,16 @@ public class ChessController : MonoBehaviour
         
     }
 
+    public void vsAI()
+    {
+        SceneManager.LoadScene("ChessGameScene");
+    }
+
+    public void vsPlayer()
+    {
+        SceneManager.LoadScene("ChessGameScene");
+    }
+
     public void GoBack()
     {
         SceneManager.LoadScene("MainScene");

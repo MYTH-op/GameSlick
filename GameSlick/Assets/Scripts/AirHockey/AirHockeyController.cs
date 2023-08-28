@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TicTacToeController : MonoBehaviour
+public class AirHockeyController : MonoBehaviour
 {
 
 
@@ -21,14 +21,13 @@ public class TicTacToeController : MonoBehaviour
 
     public void vsAI()
     {
-        SceneManager.LoadScene("TicTacToeGameScene");
+        SceneManager.LoadScene("AirHockeyGameScene");
     }
 
     public void vsPlayer()
     {
-        SceneManager.LoadScene("TicTacToeGameScene");
+        SceneManager.LoadScene("AirHockeyGameScene");
     }
-
 
     public void GoBack()
     {

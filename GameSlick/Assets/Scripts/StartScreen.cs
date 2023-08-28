@@ -1,16 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TicTacToeController : MonoBehaviour
+public class StartScreen : MonoBehaviour
 {
-
-
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartCoroutine(WaitAndStart());
     }
 
     // Update is called once per frame
@@ -19,19 +16,9 @@ public class TicTacToeController : MonoBehaviour
         
     }
 
-    public void vsAI()
+    IEnumerator WaitAndStart()
     {
-        SceneManager.LoadScene("TicTacToeGameScene");
-    }
-
-    public void vsPlayer()
-    {
-        SceneManager.LoadScene("TicTacToeGameScene");
-    }
-
-
-    public void GoBack()
-    {
+        yield return new WaitForSeconds(1.5f);
         SceneManager.LoadScene("MainScene");
     }
 

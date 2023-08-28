@@ -1,12 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class PingPongController : MonoBehaviour
+public class TicTacToeGameController : MonoBehaviour
 {
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -19,9 +16,9 @@ public class PingPongController : MonoBehaviour
         
     }
 
-    public void GoBack()
+    public void Exit()
     {
-        SceneManager.LoadScene("MainScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainScene");
     }
 
 }
