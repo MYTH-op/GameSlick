@@ -80,6 +80,19 @@ public class ValidMoves
                     moves.Add(twoForward);
                 }
             }
+
+            // move for attack
+            Vector2Int attackLeft = new Vector2Int(currentPos.x + 1, currentPos.y - 1);
+            if (inBoundaries(attackLeft))
+            {
+                moves.Add(attackLeft);
+            }
+            Vector2Int attackRight = new Vector2Int(currentPos.x + 1, currentPos.y + 1);
+            if (inBoundaries(attackRight))
+            {
+                moves.Add(attackRight);
+            }
+
         }
         else
         {
@@ -98,6 +111,20 @@ public class ValidMoves
                     moves.Add(twoForward);
                 }
             }
+
+            // move for attack
+            Vector2Int attackLeft = new Vector2Int(currentPos.x - 1, currentPos.y - 1);
+            if (inBoundaries(attackLeft))
+            {
+                moves.Add(attackLeft);
+            }
+
+            Vector2Int attackRight = new Vector2Int(currentPos.x - 1, currentPos.y + 1);
+            if (inBoundaries(attackRight))
+            {
+                moves.Add(attackRight);
+            }
+
         }
 
         // check if the added moves are valid

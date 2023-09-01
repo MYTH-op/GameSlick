@@ -37,6 +37,7 @@ public class ChessGameController : MonoBehaviour
 
     internal void movePiece(GameObject pieceToMove, int rowToMove, int colToMove)
     {
+        Debug.Log($"Piece moved to {rowToMove}, {colToMove}");
         // get the current tile of the piece
         GameObject currentTile = ChessBoardHandler.Instance.GetTile(pieceToMove.GetComponent<PlayerPlacementhandler>().row, pieceToMove.GetComponent<PlayerPlacementhandler>().column);
         tiles currentTileScript = currentTile.GetComponent<tiles>();
@@ -109,15 +110,23 @@ public class ChessGameController : MonoBehaviour
                 List<Vector2Int> mov = validMovesScript.getValidMoves(selectedPiece.name, pieceScript.row, pieceScript.column, PiecesPos);
                 if (mov.Count > 0)
                 {
+                    Debug.Log("Ready to move the piece");
                     if (mov.Contains(new Vector2Int(row, col)))
                     {
+                        Debug.Log($"Moving piece to {row}, {col}");
                         // if the move is valid, move the piece
                         movePiece(selectedPiece, row, col);
                     }
                     else
                     {
                         // if the move is not valid, do nothing
+                        // clear the selection
+                        clearSelection();
                     }
+                }
+                else
+                {
+                    clearSelection();
                 }
             }
             else
