@@ -14,7 +14,7 @@ public class ObjectMovement : MonoBehaviour
     void Start()
     {
         targetPosition = transform.position;
-        rotatingObject = GameObject.Find("Wood").transform; // Replace "RotatingObject" with the actual name of your rotating object
+        rotatingObject = GameObject.Find("Wood").transform; // Replace "Wood" with the actual name of your rotating object
     }
 
     void Update()
@@ -31,7 +31,10 @@ public class ObjectMovement : MonoBehaviour
 
         if (isStuck)
         {
+            // Lock the object's position to match the rotating object
             transform.position = rotatingObject.TransformPoint(hitOffset);
+            
+            // Lock the object's rotation to match the rotating object's rotation
             transform.rotation = rotatingObject.rotation;
         }
     }
