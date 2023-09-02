@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;
 public class ChessGameController : MonoBehaviour
 {
 
-    [SerializeField] private GameObject[] pieces;
-
     public TextMeshProUGUI whiteTurnText, blackTurnText;
 
     private bool isWhiteTurn;
@@ -17,10 +15,16 @@ public class ChessGameController : MonoBehaviour
     public GameObject selectedPiece;
     public GameObject selectedTile;
     ValidMoves validMovesScript = new ValidMoves();
-    List<Vector2Int> PiecesPos = new List<Vector2Int>();
+    public List<Vector2Int> PiecesPos = new List<Vector2Int>();
 
     public List<Vector2Int> validMoves;
 
+    internal static ChessGameController Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -65,7 +69,6 @@ public class ChessGameController : MonoBehaviour
         selectedTile = ChessBoardHandler.Instance.GetTile(row, col);
         tiles tileScript = selectedTile.GetComponent<tiles>();
 
-
         // check if a piece is present on the tile
         if (tileScript.piece != null)
         {
@@ -76,13 +79,21 @@ public class ChessGameController : MonoBehaviour
                 // if a piece is already selected, check if the piece on the tile is an enemy piece
                 if (checkEnemy(tileScript.piece))
                 {
-                    // if the piece on the tile is an enemy piece
-                        // check if the attack move is in valid moves
-                        
-                        // if the attack move is in valid moves, attack the piece
-                        
-                        // if the attack move is not in valid moves, do nothing
+                // if the piece on the tile is an enemy piece
 
+                    // check if the attack move is in valid moves
+                    if (validMoves.Contains(new Vector2Int(row, col)))
+                    {
+                        // if the attack move is in valid moves, attack the piece
+                        Debug.Log("Attacking the piece");
+                        Attack(tileScript.piece);
+                        
+                    }
+                    else
+                    {
+                        // if the attack move is not in valid moves, do nothing
+                        Debug.Log("Invalid move");
+                    }
 
                 }
                 else
@@ -175,9 +186,14 @@ public class ChessGameController : MonoBehaviour
     internal void Attack(GameObject PieceToAttack)
     {
         PlayerPlacementhandler pieceToAttackScript = PieceToAttack.GetComponent<PlayerPlacementhandler>();
+        tiles pieceToAttackTile = ChessBoardHandler.Instance.GetTile(pieceToAttackScript.row, pieceToAttackScript.column).GetComponent<tiles>();
         selectedPiece.GetComponent<PlayerPlacementhandler>().row = pieceToAttackScript.row;
         selectedPiece.GetComponent<PlayerPlacementhandler>().column = pieceToAttackScript.column;
         selectedPiece.transform.position = PieceToAttack.transform.position;
+        tiles selectedPieceTile = ChessBoardHandler.Instance.GetTile(selectedPiece.GetComponent<PlayerPlacementhandler>().row, selectedPiece.GetComponent<PlayerPlacementhandler>().column).GetComponent<tiles>();
+        selectedPieceTile.piece = null;
+        pieceToAttackTile.piece = selectedPiece;
+        Destroy(pieceToAttackScript.gameObject);
     }
 
 

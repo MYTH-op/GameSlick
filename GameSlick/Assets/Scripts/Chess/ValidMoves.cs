@@ -5,9 +5,7 @@ using System;
 
 public class ValidMoves
 {
-
-
-    public List<Vector2Int> getValidMoves(String type, int row, int col, List<Vector2Int> piecesPos)
+    public List<Vector2Int> getValidMoves(string type, int row, int col, List<Vector2Int> piecesPos)
     {
         List<Vector2Int> validMoves = new List<Vector2Int>();
         Vector2Int currentPos = new Vector2Int(row, col);
@@ -46,7 +44,6 @@ public class ValidMoves
                 validMoves.AddRange(bishopMoves);
                 break;
 
-
             case "king_b":
             case "king_w":
                 validMoves = ValidMovesForKing(new Vector2Int(row, col), piecesPos);
@@ -66,29 +63,49 @@ public class ValidMoves
         // add all the possible moves for pawn
         if (black)
         {
+
+        //    List<Vector2Int> possibleMoves = new List<Vector2Int>
+        //    {
+        //        new Vector2Int(currentPos.x + 1, currentPos.y),
+        //        new Vector2Int(currentPos.x + 2, currentPos.y),
+        //        new Vector2Int(currentPos.x + 1, currentPos.y - 1),
+        //        new Vector2Int(currentPos.x + 1, currentPos.y + 1),
+        //};
+
+
             Vector2Int oneForward = new Vector2Int(currentPos.x + 1, currentPos.y);
-            if (inBoundaries(oneForward))
+            if (inBoundaries(oneForward) && !checkForFriendlyPieceOnMoves(oneForward, piecesPos) && !checkForEnemyPieceOnMoves(oneForward, piecesPos))
             {
                 moves.Add(oneForward);
-            }
-
-            Vector2Int twoForward = new Vector2Int(currentPos.x + 2, currentPos.y);
-            if (inStartingPos(currentPos))
-            {
-                if (inBoundaries(twoForward))
+                Vector2Int twoForward = new Vector2Int(currentPos.x + 2, currentPos.y);
+                if (inStartingPos(currentPos))
                 {
-                    moves.Add(twoForward);
+                    if (inBoundaries(twoForward) && !checkForFriendlyPieceOnMoves(twoForward, piecesPos) && !checkForEnemyPieceOnMoves(twoForward, piecesPos))
+                    {
+                        moves.Add(twoForward);
+                    }
+
                 }
             }
+            
+            //Vector2Int twoForward = new Vector2Int(currentPos.x + 2, currentPos.y);
+            //if (inStartingPos(currentPos))
+            //{
+            //    if (inBoundaries(twoForward) && !checkForFriendlyPieceOnMoves(twoForward, piecesPos) && !checkForEnemyPieceOnMoves(twoForward, piecesPos))
+            //    {
+            //        moves.Add(twoForward);
+            //    }
+                
+            //}
 
             // move for attack
             Vector2Int attackLeft = new Vector2Int(currentPos.x + 1, currentPos.y - 1);
-            if (inBoundaries(attackLeft))
+            if (inBoundaries(attackLeft) && !checkForFriendlyPieceOnMoves(attackLeft, piecesPos))
             {
                 moves.Add(attackLeft);
             }
             Vector2Int attackRight = new Vector2Int(currentPos.x + 1, currentPos.y + 1);
-            if (inBoundaries(attackRight))
+            if (inBoundaries(attackRight) && !checkForFriendlyPieceOnMoves(attackRight, piecesPos))
             {
                 moves.Add(attackRight);
             }
@@ -97,30 +114,37 @@ public class ValidMoves
         else
         {
             Vector2Int oneForward = new Vector2Int(currentPos.x - 1, currentPos.y);
-            if (inBoundaries(oneForward))
+            if (inBoundaries(oneForward) && !checkForFriendlyPieceOnMoves(oneForward, piecesPos) && !checkForEnemyPieceOnMoves(oneForward, piecesPos))
             {
                 moves.Add(oneForward);
-            }
-
-            Vector2Int twoForward = new Vector2Int(currentPos.x - 2, currentPos.y);
-            Debug.Log(twoForward.ToString());
-            if (inStartingPos(currentPos))
-            {
-                if (inBoundaries(twoForward))
+                Vector2Int twoForward = new Vector2Int(currentPos.x - 2, currentPos.y);
+                if (inStartingPos(currentPos))
                 {
-                    moves.Add(twoForward);
+                    if (inBoundaries(twoForward) && !checkForFriendlyPieceOnMoves(twoForward, piecesPos) && !checkForEnemyPieceOnMoves(twoForward, piecesPos))
+                    {
+                        moves.Add(twoForward);
+                    }
                 }
             }
 
+            //Vector2Int twoForward = new Vector2Int(currentPos.x - 2, currentPos.y);
+            //if (inStartingPos(currentPos))
+            //{
+            //    if (inBoundaries(twoForward) && !checkForFriendlyPieceOnMoves(twoForward, piecesPos) && !checkForEnemyPieceOnMoves(twoForward, piecesPos))
+            //    {
+            //        moves.Add(twoForward);
+            //    }
+            //}
+
             // move for attack
             Vector2Int attackLeft = new Vector2Int(currentPos.x - 1, currentPos.y - 1);
-            if (inBoundaries(attackLeft))
+            if (inBoundaries(attackLeft) && !checkForFriendlyPieceOnMoves(attackLeft, piecesPos))
             {
                 moves.Add(attackLeft);
             }
 
             Vector2Int attackRight = new Vector2Int(currentPos.x - 1, currentPos.y + 1);
-            if (inBoundaries(attackRight))
+            if (inBoundaries(attackRight) && !checkForFriendlyPieceOnMoves(attackRight, piecesPos))
             {
                 moves.Add(attackRight);
             }
@@ -130,9 +154,9 @@ public class ValidMoves
         // check if the added moves are valid
         for (int i = 0; i < moves.Count; i++)
         {
-            if (checkForPieceOnMoves(moves[i], piecesPos))
+            if (checkForFriendlyPieceOnMoves(moves[i], piecesPos))
             {
-                return validMoves;
+                continue;
             }
             else
             {
@@ -147,7 +171,7 @@ public class ValidMoves
 
     private List<Vector2Int> ValidMovesForRook(Vector2Int currentPos, List<Vector2Int> piecesPos)
     {
-        List<Vector2Int> moves = new List<Vector2Int>();
+        List<Vector2Int> validMoves = new List<Vector2Int>();
         int i;
 
         // moves in column upward
@@ -155,13 +179,18 @@ public class ValidMoves
         {
 
             Vector2Int move = new Vector2Int(i, currentPos.y);
-            if (!inBoundaries(move) || checkForPieceOnMoves(move, piecesPos))
+            if (!inBoundaries(move) || checkForFriendlyPieceOnMoves(move, piecesPos))
             {
+                break;
+            }
+            else if (checkForEnemyPieceOnMoves(move, piecesPos))
+            {
+                validMoves.Add(move);
                 break;
             }
             else
             {
-                moves.Add(move);
+                validMoves.Add(move);
             }
         }
 
@@ -170,13 +199,18 @@ public class ValidMoves
         {
 
             Vector2Int move = new Vector2Int(i, currentPos.y);
-            if (!inBoundaries(move) || checkForPieceOnMoves(move, piecesPos))
+            if (!inBoundaries(move) || checkForFriendlyPieceOnMoves(move, piecesPos))
             {
+                break;
+            }
+            else if (checkForEnemyPieceOnMoves(move, piecesPos))
+            {
+                validMoves.Add(move);
                 break;
             }
             else
             {
-                moves.Add(move);
+                validMoves.Add(move);
             }
         }
 
@@ -185,13 +219,18 @@ public class ValidMoves
         for (i = currentPos.y + 1; i <= 7; i++)
         {
             Vector2Int move = new Vector2Int(currentPos.x, i);
-            if (!inBoundaries(move) || checkForPieceOnMoves(move, piecesPos))
+            if (!inBoundaries(move) || checkForFriendlyPieceOnMoves(move, piecesPos))
             {
+                break;
+            }
+            else if (checkForEnemyPieceOnMoves(move, piecesPos))
+            {
+                validMoves.Add(move);
                 break;
             }
             else
             {
-                moves.Add(move);
+                validMoves.Add(move);
             }
         }
 
@@ -199,17 +238,22 @@ public class ValidMoves
         for (i = currentPos.y - 1; i >= 0; i--)
         {
             Vector2Int move = new Vector2Int(currentPos.x, i);
-            if (!inBoundaries(move) || checkForPieceOnMoves(move, piecesPos))
+            if (!inBoundaries(move) || checkForFriendlyPieceOnMoves(move, piecesPos))
             {
+                break;
+            }
+            else if (checkForEnemyPieceOnMoves(move, piecesPos))
+            {
+                validMoves.Add(move);
                 break;
             }
             else
             {
-                moves.Add(move);
+                validMoves.Add(move);
             }
         }
 
-        return moves;
+        return validMoves;
     }
 
 
@@ -233,10 +277,24 @@ public class ValidMoves
         // check if the added moves are valid
         foreach (Vector2Int move in possibleMoves)
         {
-            if (inBoundaries(move) && !checkForPieceOnMoves(move, piecesPos))
+            if (!inBoundaries(move) || checkForFriendlyPieceOnMoves(move, piecesPos))
+            {
+                continue;
+            }
+            else if (checkForEnemyPieceOnMoves(move, piecesPos))
+            {
+                validMoves.Add(move);
+                //continue;
+            }
+            else
             {
                 validMoves.Add(move);
             }
+
+            //if (inBoundaries(move) && !checkForFriendlyPieceOnMoves(move, piecesPos))
+            //{
+            //    validMoves.Add(move);
+            //}
         }
 
         return validMoves;
@@ -250,8 +308,13 @@ public class ValidMoves
         for (int i = currentPos.x + 1, j = currentPos.y + 1; i <= 7 && j <= 7; i++, j++)
         {
             Vector2Int move = new Vector2Int(i, j);
-            if (!inBoundaries(move) || checkForPieceOnMoves(move, piecesPos))
+            if (!inBoundaries(move) || checkForFriendlyPieceOnMoves(move, piecesPos))
             {
+                break;
+            }
+            else if(checkForEnemyPieceOnMoves(move, piecesPos))
+            {
+                validMoves.Add(move);
                 break;
             }
             else
@@ -265,8 +328,13 @@ public class ValidMoves
         for (int i = currentPos.x + 1, j = currentPos.y - 1; i <= 7 && j >= 0; i++, j--)
         {
             Vector2Int move = new Vector2Int(i, j);
-            if (!inBoundaries(move) || checkForPieceOnMoves(move, piecesPos))
+            if (!inBoundaries(move) || checkForFriendlyPieceOnMoves(move, piecesPos))
             {
+                break;
+            }
+            else if (checkForEnemyPieceOnMoves(move, piecesPos))
+            {
+                validMoves.Add(move);
                 break;
             }
             else
@@ -280,8 +348,13 @@ public class ValidMoves
         for (int i = currentPos.x - 1, j = currentPos.y + 1; i >= 0 && j <= 7; i--, j++)
         {
             Vector2Int move = new Vector2Int(i, j);
-            if (!inBoundaries(move) || checkForPieceOnMoves(move, piecesPos))
+            if (!inBoundaries(move) || checkForFriendlyPieceOnMoves(move, piecesPos))
             {
+                break;
+            }
+            else if (checkForEnemyPieceOnMoves(move, piecesPos))
+            {
+                validMoves.Add(move);
                 break;
             }
             else
@@ -295,8 +368,13 @@ public class ValidMoves
         for (int i = currentPos.x - 1, j = currentPos.y - 1; i >= 0 && j >= 0; i--, j--)
         {
             Vector2Int move = new Vector2Int(i, j);
-            if (!inBoundaries(move) || checkForPieceOnMoves(move, piecesPos))
+            if (!inBoundaries(move) || checkForFriendlyPieceOnMoves(move, piecesPos))
             {
+                break;
+            }
+            else if (checkForEnemyPieceOnMoves(move, piecesPos))
+            {
+                validMoves.Add(move);
                 break;
             }
             else
@@ -326,10 +404,25 @@ public class ValidMoves
 
         foreach (Vector2Int move in possibleMoves)
         {
-            if (inBoundaries(move) && !checkForPieceOnMoves(move, piecesPos))
+
+            if (!inBoundaries(move) || checkForFriendlyPieceOnMoves(move, piecesPos))
+            {
+                continue;
+            }
+            else if (checkForEnemyPieceOnMoves(move, piecesPos))
+            {
+                validMoves.Add(move);
+                continue;
+            }
+            else
             {
                 validMoves.Add(move);
             }
+
+            //if (inBoundaries(move) && !checkForFriendlyPieceOnMoves(move, piecesPos))
+            //{
+            //    validMoves.Add(move);
+            //}
         }
 
         return validMoves;
@@ -347,18 +440,39 @@ public class ValidMoves
         return pos.x == 1 || pos.x == 6;
     }
 
-    private bool checkForPieceOnMoves(Vector2Int movePos, List<Vector2Int> PiecesPos)
+    private bool checkForFriendlyPieceOnMoves(Vector2Int movePos, List<Vector2Int> PiecesPos)
     {
         for (int i = 0; i < PiecesPos.Count; i++)
         {
             if (PiecesPos[i] == movePos)
             {
-                return true;
+                GameObject pieceTile = ChessBoardHandler.Instance.GetTile(PiecesPos[i].x, PiecesPos[i].y);
+                GameObject piece = pieceTile.gameObject.GetComponent<tiles>().piece;
+                if (piece.tag == ChessGameController.Instance.selectedPiece.tag)
+                {
+                    return true;
+                }
             }
         }
         return false;
     }
 
+    private bool checkForEnemyPieceOnMoves(Vector2Int movePos, List<Vector2Int> PiecesPos)
+    {
+        for (int i = 0; i < PiecesPos.Count; i++)
+        {
+            if (PiecesPos[i] == movePos)
+            {
+                GameObject pieceTile = ChessBoardHandler.Instance.GetTile(PiecesPos[i].x, PiecesPos[i].y);
+                GameObject piece = pieceTile.gameObject.GetComponent<tiles>().piece;
+                if (piece.tag != ChessGameController.Instance.selectedPiece.tag)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 
 }
